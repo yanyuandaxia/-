@@ -1,0 +1,125 @@
+<!-- 顶栏 -->
+<view class="topcolumn">
+  <button open-type="contact" />
+	<!--用户信息-->
+	<view class="userInfo">
+		<view class="userinfo-avatar">
+			<open-data type="userAvatarUrl"></open-data>
+		</view>
+		<view class="userinfo-nickname">
+			<open-data type="userNickName"></open-data>
+		</view>
+	</view>
+	<!--积分排名-->
+	<view class="integral">
+		<view class="dot"></view>
+		<view class="num"> X {{num}}</view>
+		<view class="rank" id='globalRank'> 全国排名：{{rank[0]}}/{{init.sum[0]}}</view>
+		<view class="rank" id='schoolRank'> 全校排名：{{rank[1]}}/{{init.sum[1]}}</view>
+    <view class="rank" id='resttime'> 剩余次数：{{last}}</view>
+	</view>
+	<!--按钮-->
+  <view class="begin" hover-class="button-hover" hover-stay-time="2000" bindtap='alert2' wx:if='{{flag.loged == false}}'>开始挑战</view>
+  <view class="begin" hover-class="button-hover" hover-stay-time="2000" bindtap='alert2' wx:elif='{{last <= 0}}'>开始挑战</view>
+	<view class="begin" hover-class="button-hover" hover-stay-time="2000" bindtap='begintest' wx:else>开始挑战</view>
+	<view wx:if="{{flag.loged}}" class="log">登录成功</view>
+	<button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" bind:tap="log" class="log" hover-class="button-hover" hover-stay-time="2000" wx:else>点击注册</button>
+	<view bind:tap="openAnnouncement" class="openAnnouncement" style='background-color:rgb({{flash[0]}}, {{flash[1]}}, {{flash[2]}})'>公告</view>
+</view>
+<!--提示栏-->
+<view wx:if="{{alert2}}">
+	<view class="announcementPage" bindtap='closeAnnouncement'></view>
+	<view class="announcement" id='alert2' wx:if='{{flag.loged == false && noinfo == false}}'>
+		<text class='alert2content'>您尚未登录\n请先登录再答题</text>
+  </view>
+  <view class="announcement" id='alert2' wx:elif='{{flag.loged == false && noinfo == true}}'>
+		<text class='alert2content'>您尚未填写全部信息\n请按要求填写</text>
+  </view>
+	<view class="announcement" id='alert2' wx:elif='{{flag.loged == true && noinfo == false}}'>
+		<text class='alert2content'>{{nexttime}}</text>
+  </view>
+</view>
+<view wx:if="{{share}}">
+	<view class="announcementPage" bindtap='closeAnnouncement'></view>
+	<view class="announcement" id='alert2' wx:if='{{true}}'>
+		<text class='alert2content'>分享成功！\n下次首题得分加倍！</text>
+  </view>
+</view>
+<!-- 排行榜 -->
+<view class="rankingListPage">
+	<!--开关-->
+	<view catchtap="globalOpen" class="rankOpen" id="global" style="background-color:{{color[0]}}">总排行榜</view>
+	<view catchtap="friendOpen" class="rankOpen" id="friend" style="background-color:{{color[1]}}">校排行榜</view>
+	<!--排行榜内容-->
+	<block wx:if="{{flag.global}}">
+		<scroll-view scroll-y='true' scroll-top='0' id="global-rank" class="rankingList">
+			<view wx:for="{{init.lists[0]}}" wx:key='*this'>
+      <view class='listLine'>
+				<view id='listIndex'>{{index + 1}}</view>
+        <image id="listAvatar" src='{{item[0]}}' mode="scaleToFill"></image>
+				<view id='listName'>{{item[1]}}</view>
+        <view id='listDot'></view>
+        <view id="listnum"> X {{item[2]}}</view>
+      </view>
+			</view>
+		</scroll-view>
+	</block>
+	<block wx:else>
+		<scroll-view scroll-y='true' scroll-top='0' id="friend-rank" class="rankingList">
+			<view wx:for="{{init.lists[1]}}" wx:key='*this'>
+      <view class='listLine'>
+				<view id='listIndex'>{{index + 1}}</view>
+        <image id="listAvatar" src='{{item[0]}}' mode="scaleToFill"></image>
+				<view id='listName'>{{item[1]}}</view>
+        <view id='listDot'></view>
+        <view id="listnum"> X {{item[2]}}</view>
+      </view>
+			</view>
+		</scroll-view>
+	</block>
+</view>
+
+<!-- 公告栏 -->
+<view wx:if="{{flag.announcement}}">
+	<view class="announcementPage" bindtap='closeAnnouncement'></view>
+	<view class="announcement">
+		<text class="title">公告</text>
+		<scroll-view scroll-y='true' scroll-top='0' id="global-rank" class="announcementContent">
+			<view class="content" wx:for="{{init.content}}">
+				<view class="line">{{}}{{item}}</view>
+			</view>
+		</scroll-view>
+	</view>
+</view>
+
+<!--登陆栏-->
+<view wx:if="{{flag.log}}">
+	<view class="announcementPage" bindtap='closeAnnouncement'></view>
+	<view class="announcement" id='logPage'>
+		<!--选择栏-->
+		<block wx:if="{{flag.choose == 0}}">
+			<view hover-class="button-hover" hover-stay-time="2000" bind:tap="logStudent" class="logPeople" id="student">校内人员注册</view>
+			<view hover-class="button-hover" hover-stay-time="2000" bind:tap="logOther" class="logPeople" id="other">校外人员注册</view>
+		</block>
+		<!--校内栏-->
+		<block wx:elif="{{flag.choose == 1}}">
+			<form bindsubmit="submitData">
+				<input placeholder="真实姓名" class="inputs" id="name" name="name">{{name}}</input>
+				<input placeholder="手机号" type="num" class="inputs" id="phone" name='phone'>{{phone}}</input>
+				<input placeholder="学号" type="num" class="inputs" id="num" name='num'>{{stuentnum}}</input>
+				<button form-type="submit" class='log' id='submit' wx:if='{{flag.submited==false}}'>确定</button>
+        <button  class='log' id='submited' wx:else>确定</button>
+			</form>
+		</block>
+		<!--校外栏-->
+		<block wx:else>
+			<form bindsubmit="submitData">
+				<input placeholder="手机号" type="num" class="inputs" id="phone" name='phone'>{{phone}}</input>
+				<button form-type="submit" class='log' id='submit' wx:if='{{flag.submited==false}}'>确定</button>
+        <button  class='log' id='submited' wx:else>确定</button>
+			</form>
+		</block>
+		<!--提示语-->
+		<view wx:if="{{flag.alert}}" class='alert'>请检查您的网络连接，并在彻底关闭小程序后重新打开！</view>
+	</view>
+</view>

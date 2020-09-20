@@ -1,0 +1,31 @@
+page
+{
+	background-image:  url('https://www.pkusess.club/beijing');
+	background-size: cover;
+}
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color:white;
+}
+
+.usermotto {
+  margin-top: 200px;
+  color:white;
+}
+
+.container{
+  align-items: center;
+}

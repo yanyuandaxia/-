@@ -1,0 +1,49 @@
+<!--遮挡板-->
+<view wx:if="{{plate}}" class="plate"></view>
+<!--结束板-->
+<view wx:if="{{finish}}">
+	<view class="finishPage"></view>
+	<view class="finish">
+	    <view class="finishDot"></view>
+	    <view class="finishnum"> X {{step}}</view>
+	    <view wx:if="{{text}}"class="text">
+		    <view wx:if="{{num <= 5}}">革命尚未成功，同志仍需努力！</view>
+		    <view wx:elif="{{num <= 10}}">还不错哦，再接再厉！</view>
+		    <view wx:elif="{{num <= 20}}">您太聚了！</view>
+        <view wx:elif="{{num <= 30}}">大佬大佬，给个好友位吧！</view>
+		    <view wx:elif="{{num >= 30}}">巨神orz，答穿答题墙！</view>
+	    </view>
+	   	<view class="return" hover-class="button-hover" hover-stay-time="2000" bindtap='backhome'>返回主页</view>
+	</view>
+</view>
+<!--主体-->
+<view class="background"></view>
+<view class='secondCanvasPage'>
+	<!--计时器-->
+  <canvas canvas-id="secondCanvas" class='secondCanvasPage'></canvas>
+  <!--信息栏-->
+  <view class='numPage'>
+    <view class="dot"></view>
+    <view class="num"> X {{num}}</view>
+  </view>
+  <view class="avatarPage">
+    <image class="avatar" src='{{avatarUrl}}' mode="scaleToFill"></image>
+  </view>
+  <!--问题-->
+  <view class='question' wx:if="{{begin}}">
+    <view class='title'>{{time}}.<text>\t</text>{{title}}</view>
+    <view class='op' id="a" bind:tap="submitA" style="background-color: {{color.a}}"><view class='optitle'>A.</view><view class='opcontent'>{{op[0]}}</view></view>
+    <view class='op' id="b" bind:tap="submitB" style="background-color: {{color.b}}"><view class='optitle'>B.</view><view class='opcontent'>{{op[1]}}</view></view>
+    <view class='op' id="c" bind:tap="submitC" style="background-color: {{color.c}}"><view class='optitle'>C.</view><view class='opcontent'>{{op[2]}}</view></view>
+    <view class='op' id="d" bind:tap="submitD" style="background-color: {{color.d}}"><view class='optitle'>D.</view><view class='opcontent'>{{op[3]}}</view></view>
+  </view>
+  <!--倒计时-->
+  <view wx:else class='countdown'>{{countdown}}</view>
+  <!--进度条-->
+  <view class='progress'>
+    <view class='bg'></view>
+    <view class='active' style='height: {{height}};top: {{top}}'></view>
+    <view class="pgText">{{time}}/10</view>
+  </view>
+</view>
+
